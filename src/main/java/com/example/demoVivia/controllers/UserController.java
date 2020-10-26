@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demoVivia.bos.RoleBo;
+import com.example.demoVivia.bos.UserBo;
+import com.example.demoVivia.components.UserComponent;
+import com.example.demoVivia.dtos.RoleDto;
 import com.example.demoVivia.dtos.UserDto;
 import com.example.demoVivia.entities.UserEntity;
 import com.example.demoVivia.repositories.UserRepo;
@@ -27,6 +31,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepo userRepo;
+
+	@Autowired
+	private UserComponent userComponent;
 
 	@PostMapping
 	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
@@ -45,21 +52,20 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getUser(@PathVariable("userId") Integer userId) {
 
-		Optional<UserEntity> optionalEntity = userRepo.findById(userId);
-		if (optionalEntity.isPresent()) {
-
-			UserDto userDto = new UserDto();
-			UserEntity entity = optionalEntity.get();
-			userDto.setId(entity.getId());
-			userDto.setName(entity.getName());
-			userDto.setDepartment(entity.getDepartment());
-
-			return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+		UserBo userBo = userComponent.getUserById(userId);
+		UserDto userDto = new UserDto();
+		userDto.setId(userBo.getId());
+		userDto.setName(userBo.getName());
+		userDto.setDepartment(userBo.getDepartment());
+		userDto.setRoleDtos(new ArrayList<>());
+		for (RoleBo roleBo : userBo.getRoleBos()) {
+			RoleDto roleDto = new RoleDto();
+			roleDto.setId(roleBo.getId());
+			roleDto.setName(roleBo.getName());
+			userDto.getRoleDtos().add(roleDto);
 		}
 
-		else {
-			return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
 
 	}
 
@@ -100,33 +106,33 @@ public class UserController {
 	}
 
 	@PatchMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUserPatch(@PathVariable("userId") Integer userId, @RequestBody UserDto userDto) {
-		
+	public ResponseEntity<UserDto> updateUserPatch(@PathVariable("userId") Integer userId,
+			@RequestBody UserDto userDto) {
+
 		Optional<UserEntity> optionalEntity = userRepo.findById(userId);
 		//
-		
-		if(optionalEntity.isPresent()) { 
+
+		if (optionalEntity.isPresent()) {
 			UserEntity entity = optionalEntity.get();
 			if (userDto.getName() != null) {
 				entity.setName(userDto.getName());
 			}
-			
+
 			if (userDto.getDepartment() != null) {
 				entity.setDepartment(userDto.getDepartment());
 			}
 			userRepo.save(entity);
-			
+
 			userDto.setId(entity.getId());
 			userDto.setName(entity.getName());
 			userDto.setDepartment(entity.getDepartment());
-			
+
 			return new ResponseEntity<UserDto>(userDto, HttpStatus.ACCEPTED);
-		}
-		else 
+		} else
 			return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
-		
+
 	}
-	
+
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<UserDto> deleteUser(@PathVariable("userId") Integer userId) {
 		userRepo.deleteById(userId);

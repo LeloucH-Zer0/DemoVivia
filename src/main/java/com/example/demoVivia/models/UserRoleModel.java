@@ -13,11 +13,11 @@ public abstract class UserRoleModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "userid")
-	private Integer UserId;
+	@Column(name = "user_id")
+	private Integer userId;
 	
-	@Column(name = "roleid")
-	private Integer RoleId;
+	@Column(name = "role_id")
+	private Integer roleId;
 
 	public Integer getId() {
 		return id;
@@ -28,19 +28,19 @@ public abstract class UserRoleModel {
 	}
 
 	public Integer getUserId() {
-		return UserId;
+		return userId;
 	}
 
 	public void setUserId(Integer userId) {
-		UserId = userId;
+		this.userId = userId;
 	}
 
 	public Integer getRoleId() {
-		return RoleId;
+		return roleId;
 	}
 
 	public void setRoleId(Integer roleId) {
-		RoleId = roleId;
+		this.roleId = roleId;
 	}
 
 }
