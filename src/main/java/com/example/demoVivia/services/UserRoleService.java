@@ -17,7 +17,8 @@ public class UserRoleService {
 	private UserRoleRepo repo;
 
 	public List<UserRoleBo> findByUserId(Integer userId) {
-		List<UserRoleEntity> userRoleEntities = repo.findByUserId(userId);
+		List<UserRoleEntity> userRoleEntities = repo.findByUserIdAndStatus(userId, true);
+		
 		List<UserRoleBo> userRoleBos = new ArrayList<>();
 		for (UserRoleEntity userRoleEntity : userRoleEntities) {
 			UserRoleBo bo = new UserRoleBo();

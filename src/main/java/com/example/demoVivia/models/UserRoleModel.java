@@ -18,6 +18,17 @@ public abstract class UserRoleModel {
 	
 	@Column(name = "role_id")
 	private Integer roleId;
+	
+	@Column(name = "status")
+	private Boolean status;
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	public Integer getId() {
 		return id;

@@ -10,6 +10,6 @@ import com.example.demoVivia.entities.UserRoleEntity;
 @Repository
 public interface UserRoleRepo extends JpaRepository<UserRoleEntity, Integer> {
 	
-	List<UserRoleEntity> findByUserId(Integer userId); 
+	List<UserRoleEntity> findByUserIdAndStatus(Integer userId, Boolean status); 
 
 }

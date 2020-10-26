@@ -53,6 +53,7 @@ public class UserRoleController {
 			userroleDto.setId(entity.getId());
 			userroleDto.setUserId(entity.getUserId());
 			userroleDto.setRoleId(entity.getRoleId());
+			userroleDto.setStatus(entity.getStatus());
 
 			return new ResponseEntity<UserRoleDto>(userroleDto, HttpStatus.OK);
 		}
@@ -126,9 +127,22 @@ public class UserRoleController {
 		
 	}
 	
+	/**
+	 * user role id
+	 * find record associated with user role id
+	 * set status to false
+	 * saving it to the DB
+	 * @param userroleId
+	 * @return
+	 */
 	@DeleteMapping("/{userroleId}")
 	public ResponseEntity<UserRoleDto> deleteUserRole(@PathVariable("userroleId") Integer userroleId) {
-		userroleRepo.deleteById(userroleId);
+		Optional<UserRoleEntity> userroleEntity = userroleRepo.findById(userroleId);
+		UserRoleEntity entity = userroleEntity.get();
+		
+		entity.setStatus(false);
+		
+		userroleRepo.save(entity);
 		return new ResponseEntity<UserRoleDto>(HttpStatus.NO_CONTENT);
 	}
 

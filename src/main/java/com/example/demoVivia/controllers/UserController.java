@@ -51,7 +51,7 @@ public class UserController {
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getUser(@PathVariable("userId") Integer userId) {
-
+		
 		UserBo userBo = userComponent.getUserById(userId);
 		UserDto userDto = new UserDto();
 		userDto.setId(userBo.getId());
